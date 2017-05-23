@@ -1,0 +1,39 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="header"></view>
+  <scroll-view scroll-y class="wrap" style="bottom: {{bottom}};">
+    <view
+      wx:for="{{songList}}"
+      wx:key="unique" class="song"
+      wx:for-item="song"
+      wx:for-index="idx"
+      data-song-id="{{idx}}"
+      bindtap="selectSong">
+      <view>
+        <text>{{song.no}}</text>
+        <text class="song-name">{{song.songName}}</text>
+      </view>
+      <text>{{song.playtime}}</text>
+    </view>
+  </scroll-view>
+  <view class="player-container" wx:if="{{song.index || song.index === 0}}">
+    <view class="info">
+      <view class="picture">
+        <image src="{{song.image}}"></image>
+      </view>
+      <view>
+        <view>
+          {{song.name}}
+        </view>
+        <view>
+          {{song.singer}}
+        </view>
+      </view>
+    </view>
+    <view class="options">
+      <text class="fa fa-backward button"></text>
+      <text class="fa fa-play-circle-o button play" bindtap="play"></text>
+      <text class="fa fa-forward button"></text>
+    </view>
+  </view>
+</view>
