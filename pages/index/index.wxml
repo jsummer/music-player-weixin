@@ -31,9 +31,10 @@
       </view>
     </view>
     <view class="options">
-      <text class="fa fa-backward button"></text>
-      <text class="fa fa-play-circle-o button play" bindtap="play"></text>
-      <text class="fa fa-forward button"></text>
+      <text class="fa fa-backward button" bindtap="prev"></text>
+      <text class="fa fa-play-circle-o button play" bindtap="play" wx:if="{{status === 'stop'}}"></text>
+      <text class="fa fa-pause-circle-o button play" bindtap="play" wx:if="{{status === 'run'}}"></text>
+      <text class="fa fa-forward button" bindtap="next"></text>
     </view>
   </view>
 </view>

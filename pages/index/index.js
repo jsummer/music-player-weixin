@@ -129,7 +129,8 @@ Page({
       albumLink: "/musicbox/shop/v3/album/25/album_91325.htm",
       playtime: "211"
     }],
-    bottom: '0rpx'
+    bottom: '0rpx',
+    status: 'stop'
   },
   //事件处理函数
   bindViewTap: function() {
@@ -139,6 +140,9 @@ Page({
   },
   selectSong (e) {
     let i = e.currentTarget.dataset.songId
+    this.setCurrentSong(i)
+  },
+  setCurrentSong (i) {
     let song = this.data.songList[i]
     console.log(song)
     let l = this.data.songList.length
@@ -160,17 +164,51 @@ Page({
       bottom: '150rpx',
       song: currentSong
     })
+    this.playSong()
   },
-  play () {
+  playSong () {
+    wx.showLoading()
     let song = this.data.song
+    this.setData({
+      status: 'run'
+    })
     wx.playBackgroundAudio({
       dataUrl: `http://ws.stream.qqmusic.qq.com/wsmusic/${song.id}.m4a?fromtag=46`,
       title: song.name,
-      coverImgUrl: song.image
+      coverImgUrl: song.image,
+      success: () => {
+        wx.hideLoading()
+      },
+      fail: () => {
+        this.next()
+        wx.hideLoading()
+      }
     })
   },
-  loadSource () {
-    wx.request
+  play () {
+    let status = this.data.status
+    switch (status) {
+      case 'run':
+        wx.pauseBackgroundAudio()
+        this.setData({
+          status: 'stop'
+        })
+        break;
+      case 'stop':
+        wx.playBackgroundAudio()
+        this.setData({
+          status: 'run'
+        })
+        break;
+    }
+  },
+  next () {
+    let current = this.data.song
+    this.setCurrentSong(current.next)
+  },
+  prev () {
+    let current = this.data.song
+    this.setCurrentSong(current.prev)
   },
   onLoad: function () {
     console.log('onLoad')
